@@ -111,7 +111,7 @@ Waiting for one submission...
 
 Open the URL on the same machine. After submission, the server writes the target and exits.
 
-### Adaptive form example
+### 🧩 Adaptive form example
 
 ```json
 {
@@ -131,7 +131,7 @@ Open the URL on the same machine. After submission, the server writes the target
 python3 scripts/secret_form.py --spec examples/email-and-key.json
 ```
 
-### Raw file mode
+### 📄 Raw file mode
 
 Use `mode: "file"` when the submitted content is the target file itself:
 
