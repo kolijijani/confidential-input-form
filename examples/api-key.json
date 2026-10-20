@@ -1,0 +1,14 @@
+{
+  "title": "AI provider access",
+  "subtitle": "Enter the API key requested by your local agent",
+  "target": "~/.config/secret-vault/provider.env",
+  "mode": "env",
+  "fields": [
+    {
+      "key": "PROVIDER_API_KEY",
+      "label": "API key",
+      "type": "password",
+      "hint": "Paste the key here"
+    }
+  ]
+}

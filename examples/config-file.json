@@ -1,0 +1,9 @@
+{
+  "title": "Service account configuration",
+  "subtitle": "Paste JSON or upload the configuration file",
+  "target": "~/.config/secret-vault/service-account.json",
+  "mode": "file",
+  "fields": [
+    {"key": "SERVICE_ACCOUNT", "label": "Configuration", "type": "dual"}
+  ]
+}

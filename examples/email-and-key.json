@@ -1,0 +1,11 @@
+{
+  "title": "Email delivery setup",
+  "subtitle": "Provide the sender identity and signing credential",
+  "target": "~/.config/secret-vault/mail.env",
+  "mode": "env",
+  "fields": [
+    {"key": "MAIL_FROM", "label": "Sender email", "type": "text"},
+    {"key": "SIGNING_KEY", "label": "Signing key", "type": "password"},
+    {"key": "MAIL_CONFIG", "label": "Optional config", "type": "dual", "optional": true}
+  ]
+}
