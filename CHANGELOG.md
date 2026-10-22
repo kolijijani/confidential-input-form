@@ -2,18 +2,21 @@
 
 All notable changes to Terminal Vault are documented here.
 
-## [Unreleased]
+## [1.1.1] - 2026-10-22
 
 ### Added
 
 - `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, issue templates (bug, feature, accessibility), a pull
   request template, and `ACCESSIBILITY.md` with an honest list of known gaps.
+- CI and release badges in the README; the version badge is now dynamic instead of hard-coded.
 
 ### Fixed
 
 - Form fields are now programmatically labelled (`<label for>` → `<input id>`), including the
   `dual` paste/upload pair, so screen readers announce each field with its name.
 - The "(optional)" micro-label contrast was raised above 4.5:1.
+- The README screenshot showed the pre-1.1.0 footer ("expiry: after first save") and no countdown;
+  it is regenerated from the current renderer.
 
 ## [1.1.0] - 2026-10-22
 

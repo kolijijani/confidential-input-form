@@ -27,7 +27,7 @@ form = {
         {"key": "MAIL_CONFIG", "label": "Config bundle", "type": "dual", "optional": True},
     ],
 }
-html = secret_form.build_page(secret_form.validate_spec(form), "preview-token", True)
+html = secret_form.build_page(secret_form.validate_spec(form), "preview-token", True, expires_seconds=900)
 chrome = next((shutil.which(x) for x in ("google-chrome", "chromium", "chromium-browser") if shutil.which(x)), None)
 if not chrome:
     raise SystemExit("Chrome/Chromium was not found")

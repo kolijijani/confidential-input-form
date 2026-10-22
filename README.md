@@ -3,7 +3,8 @@
 **A one-shot, local-first form for handing secrets to AI agents without putting them in chat.**
 
 ![status](https://img.shields.io/badge/status-stable-success)
-![version](https://img.shields.io/badge/version-v1.0.0-a3e635)
+[![CI](https://github.com/kolijijani/confidential-input-form/actions/workflows/ci.yml/badge.svg)](https://github.com/kolijijani/confidential-input-form/actions/workflows/ci.yml)
+[![release](https://img.shields.io/github/v/release/kolijijani/confidential-input-form?color=a3e635)](https://github.com/kolijijani/confidential-input-form/releases/latest)
 ![python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![dependencies](https://img.shields.io/badge/dependencies-stdlib_only-15171f)
 ![platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS-lightgrey)
@@ -15,7 +16,8 @@ AI agents often need an API key, password, certificate, email address, or config
 Pasting that value into chat puts it into model context, transcripts, and possibly tool logs.
 
 Terminal Vault opens a task-specific form on your own machine. The agent decides which fields are needed;
-the user submits directly to a protected local file. The server accepts one successful submission and exits.
+the user submits directly to a protected local file. The server accepts one successful submission and
+exits; if nobody submits before the deadline it closes itself and writes nothing.
 
 The **Terminal Vault design stays fixed** while the form content adapts to each task.
 
@@ -54,7 +56,8 @@ The **Terminal Vault design stays fixed** while the form content adapts to each 
 
 ![Terminal Vault adaptive confidential input form](docs/screenshots/terminal-vault.png)
 
-*The running product with a task-specific email, signing-key, and config form. All values are dummy/empty.*
+*The running product: a task-specific email, signing-key, and paste-or-upload config form, with the
+15-minute countdown in the footer. All values are dummy/empty.*
 
 Regenerate the capture with Chrome or Chromium:
 
@@ -330,9 +333,9 @@ Read [SECURITY.md](SECURITY.md) for the complete threat model and reporting proc
 ## 🗺️ Limitations
 
 - HTTP is built in; HTTPS termination belongs to a trusted local proxy or private overlay network.
-- IPv6 bind addresses are not supported in version 1.0.
-- Windows is not supported in version 1.0 because its filesystem permission and symlink semantics do not provide the POSIX guarantees this release enforces.
-- The process is intentionally single-use and stores no submission history.
+- IPv6 bind addresses are not supported.
+- Windows is not supported: its filesystem permission and symlink semantics do not provide the POSIX guarantees this release enforces.
+- The process is intentionally single-use and stores no submission history; the deadline and single-use claim only shrink the window in which a leaked link is useful, they do not protect a credential after it lands.
 - This tool does not rotate, revoke, or validate the submitted credential.
 - Protect the destination directory and host as part of your normal security posture.
 
