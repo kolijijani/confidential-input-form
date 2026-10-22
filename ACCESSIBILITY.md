@@ -1,6 +1,6 @@
 # Accessibility
 
-Terminal Vault is a single page that exists for a few minutes, usually opened on a
+Secret Vault is a single page that exists for a few minutes, usually opened on a
 phone. The goal is WCAG 2.1 AA where it is practical for that job, and an honest
 list of what is missing.
 

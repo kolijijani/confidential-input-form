@@ -2,7 +2,7 @@
 
 ## Threat model
 
-Terminal Vault is a local-network handoff utility, not an internet-facing secret manager. Version 1.0 supports Linux and macOS, where it can enforce POSIX permission and symlink guarantees. Run it only on a trusted machine and expose it through a private network such as Tailscale, a VPN, or localhost.
+Secret Vault is a local-network handoff utility, not an internet-facing secret manager. Version 1.0 supports Linux and macOS, where it can enforce POSIX permission and symlink guarantees. Run it only on a trusted machine and expose it through a private network such as Tailscale, a VPN, or localhost.
 
 - The random URL token prevents accidental access; it is not a replacement for TLS or network access control.
 - HTTP is unencrypted. Do not expose the default server directly to the public internet.
@@ -13,7 +13,7 @@ Terminal Vault is a local-network handoff utility, not an internet-facing secret
 
 ## What this does not protect against
 
-Terminal Vault moves a secret from a browser into a file without crossing chat logs. It is not a
+Secret Vault moves a secret from a browser into a file without crossing chat logs. It is not a
 vault, and the following are explicitly out of scope:
 
 - **A compromised host.** Anyone who can read the target file, the process memory, or attach a

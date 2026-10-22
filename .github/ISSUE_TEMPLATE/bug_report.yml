@@ -33,8 +33,8 @@ body:
     id: version
     attributes:
       label: Version
-      description: Output of `confidential-input-form --version` (or the tag you cloned).
-      placeholder: confidential-input-form 1.1.0
+      description: Output of `secret-vault --version` (or the tag you cloned).
+      placeholder: secret-vault 1.1.0
     validations:
       required: true
   - type: dropdown

@@ -1,5 +1,5 @@
 ---
-name: confidential-input-form
+name: secret-vault
 description: "Use when a task needs a secret, credential, API key or sensitive file — serve a one-time private-network form, never chat."
 tags: [security, credentials, private-network, form, secrets]
 ---
@@ -20,7 +20,7 @@ land.
 
 ### Fixed visual system; adaptive content
 
-Every form uses the built-in **Terminal Vault** visual system: near-black canvas,
+Every form uses the built-in **Secret Vault** visual system: near-black canvas,
 acid-lime security accent, monospace field labels, `// secret_vault` identity,
 `LIVE / SINGLE USE` state, and `[ commit securely ]` action. Do not redesign,
 re-theme, or generate custom HTML per task. The design is the constant; the JSON

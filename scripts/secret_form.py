@@ -3,7 +3,7 @@
 Adaptive one-time secret handoff for local AI agents.
 
 The agent designs the form for the task: title, fields, input types, optional
-status, and target file. The Terminal Vault theme stays consistent. Secret values
+status, and target file. The Secret Vault theme stays consistent. Secret values
 go directly from the user's browser to a local file and are never printed.
 
 USAGE
@@ -79,7 +79,7 @@ import threading
 import time
 import urllib.parse
 
-__version__ = "1.1.2"
+__version__ = "1.2.0"
 EXPIRY_GRACE_SECONDS = 5  # keep the socket up briefly so a late visit sees the expired page
 DEF_ENV = os.path.expanduser("~/.config/secret-vault/secrets.env")
 ALLOWED_TYPES = {"text", "password", "textarea", "code", "file", "dual"}
@@ -499,7 +499,7 @@ def main():
     ap.add_argument("--audit-log", default=None,
                     help="append a value-free line per submission to this file")
     ap.add_argument("--version", action="version",
-                    version=f"confidential-input-form {__version__}")
+                    version=f"secret-vault {__version__}")
     args = ap.parse_args()
 
     spec = validate_spec(_spec_from_args(args))

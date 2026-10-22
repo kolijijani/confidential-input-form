@@ -3,8 +3,8 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "confidential-input-form"
-version = "1.1.2"
+name = "secret-vault"
+version = "1.2.0"
 description = "One-shot local form for handing secrets to AI agents without putting them in chat."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -27,12 +27,12 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/kolijijani/confidential-input-form"
-Source = "https://github.com/kolijijani/confidential-input-form"
-Issues = "https://github.com/kolijijani/confidential-input-form/issues"
+Homepage = "https://github.com/kolijijani/secret-vault"
+Source = "https://github.com/kolijijani/secret-vault"
+Issues = "https://github.com/kolijijani/secret-vault/issues"
 
 [project.scripts]
-confidential-input-form = "secret_form:main"
+secret-vault = "secret_form:main"
 
 [tool.setuptools]
 package-dir = { "" = "scripts" }

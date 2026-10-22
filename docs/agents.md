@@ -8,8 +8,8 @@ either keep the checkout or install the CLI and point the skill at that command.
 
 | Agent | Skill directory | Notes |
 |---|---|---|
-| Hermes | `~/.hermes/skills/confidential-input-form/SKILL.md` | `hermes skills install <raw SKILL.md URL>` also works, but the script path still needs fixing |
-| Claude Code | `~/.claude/skills/confidential-input-form/SKILL.md` | Skills load by `name` + `description` frontmatter |
+| Hermes | `~/.hermes/skills/secret-vault/SKILL.md` | `hermes skills install <raw SKILL.md URL>` also works, but the script path still needs fixing |
+| Claude Code | `~/.claude/skills/secret-vault/SKILL.md` | Skills load by `name` + `description` frontmatter |
 | Codex / generic agent | `~/.agents/skills/` or a project `.agents/skills/` | Any layout that lets the agent read `SKILL.md` on demand |
 | Cursor | project `.cursor/rules/` or `AGENTS.md` | Reference the SKILL.md path in the rule text |
 
@@ -17,8 +17,8 @@ either keep the checkout or install the CLI and point the skill at that command.
 
 ```sh
 # 1. get the tool
-git clone https://github.com/kolijijani/confidential-input-form.git
-cd confidential-input-form
+git clone https://github.com/kolijijani/secret-vault.git
+cd secret-vault
 
 # 2. put the skill where the agent looks (rewrites the script path for you)
 ./install.sh ~/.claude/skills
@@ -29,7 +29,7 @@ cd confidential-input-form
 Use `--dry-run` to preview.
 
 Without the installer, copy `SKILL.md` and replace every `scripts/secret_form.py` with the absolute
-path to your checkout. If you installed the CLI instead, replace it with `confidential-input-form`.
+path to your checkout. If you installed the CLI instead, replace it with `secret-vault`.
 
 ## Why the path matters
 

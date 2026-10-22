@@ -24,7 +24,7 @@ LIME = (163, 230, 53)
 INTER = "/usr/share/fonts/opentype/inter/"
 MONO = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
-shot = Image.open("docs/screenshots/terminal-vault.png").convert("RGB")
+shot = Image.open("docs/screenshots/secret-vault.png").convert("RGB")
 
 # trim page background precisely: keeps only rows/columns that carry content
 bg_probe = shot.getpixel((2, 2))
@@ -66,7 +66,7 @@ sub = "One-shot local form. It writes straight to a\nprotected 0600 file, then c
 d.multiline_text((x, y + 300), sub, font=f_sub, fill=GREY, spacing=10)
 
 # footer
-d.text((x, H - 96), "github.com/kolijijani/confidential-input-form", font=f_small, fill=DIM)
+d.text((x, H - 96), "github.com/kolijijani/secret-vault", font=f_small, fill=DIM)
 d.text((x, H - 68), "python stdlib · MIT · linux / macOS", font=f_small, fill=DIM)
 
 # screenshot on the right, cropped to the form area

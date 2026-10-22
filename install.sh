@@ -1,5 +1,5 @@
 #!/bin/sh
-# Install the confidential-input-form skill into a local AI agent's skill directory.
+# Install the secret-vault skill into a local AI agent's skill directory.
 #
 #   ./install.sh                      # auto-detect Hermes / Claude Code / generic agent dirs
 #   ./install.sh ~/.claude/skills     # explicit skill root
@@ -11,7 +11,7 @@ set -eu
 
 here=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 script="$here/scripts/secret_form.py"
-name="confidential-input-form"
+name="secret-vault"
 dry_run=0
 
 dest=""

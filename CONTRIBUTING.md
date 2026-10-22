@@ -11,14 +11,14 @@ Python file, one skill, tests that run without dependencies.
   not in test fixtures that get committed.
 - **POSIX assumptions.** Linux and macOS only for now; do not add Windows-specific
   paths without a design discussion.
-- **Keep the design fixed.** The Terminal Vault theme is the constant; the JSON spec
+- **Keep the design fixed.** The Secret Vault theme is the constant; the JSON spec
   is the adaptive layer. Do not re-theme per task.
 
 ## Development setup
 
 ```sh
-git clone https://github.com/kolijijani/confidential-input-form.git
-cd confidential-input-form
+git clone https://github.com/kolijijani/secret-vault.git
+cd secret-vault
 python3 --version   # 3.10 or newer
 ```
 

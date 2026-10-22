@@ -1,6 +1,15 @@
 # Changelog
 
-All notable changes to Terminal Vault are documented here.
+All notable changes to Secret Vault are documented here.
+
+## [1.2.0] - 2026-10-22
+
+### Renamed
+
+- The project is now **Secret Vault**. The repository moved from
+  `kolijijani/confidential-input-form` to `kolijijani/secret-vault`, the package name, console
+  script, skill name, screenshots and links all follow. The old URL redirects; the on-disk module
+  (`secret_form.py`) keeps its name so imports stay stable.
 
 ## [1.1.2] - 2026-10-22
 
@@ -38,8 +47,8 @@ All notable changes to Terminal Vault are documented here.
   live countdown, and an expired link returns `410 Gone` with a "This form expired" page.
 - `--audit-log PATH`: one value-free line per submission (timestamp, outcome, field names, byte
   count) written mode `0600`.
-- `--version`, which prints `confidential-input-form <version>`.
-- `pyproject.toml` with a `confidential-input-form` console script, so `pipx`/`uvx` can install it.
+- `--version`, which prints `secret-vault <version>`.
+- `pyproject.toml` with a `secret-vault` console script, so `pipx`/`uvx` can install it.
 - `install.sh` plus `docs/agents.md` covering Hermes, Claude Code, Codex and Cursor skill paths, and
   the script-path rewrite that makes a copied `SKILL.md` actually work.
 - Real-socket end-to-end tests: one-shot save, `0600` target, audit line without values, refusal
@@ -60,7 +69,7 @@ All notable changes to Terminal Vault are documented here.
 ### Added
 
 - Adaptive JSON specifications with six field types.
-- Terminal Vault visual system and responsive one-shot form.
+- Secret Vault visual system and responsive one-shot form.
 - Environment-file and raw-file modes.
 - Atomic mode-`0600` writes with symlink protection.
 - Binary-safe bounded multipart parsing and random upload names.

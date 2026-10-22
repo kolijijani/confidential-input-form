@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="tv-title tv-desc">
-<title id="tv-title">Terminal Vault data flow</title><desc id="tv-desc">An agent creates a task-specific specification, a local one-shot server presents the form, the user submits through a private network, and the value is written to a protected local file without entering chat.</desc>
+<title id="tv-title">Secret Vault data flow</title><desc id="tv-desc">An agent creates a task-specific specification, a local one-shot server presents the form, the user submits through a private network, and the value is written to a protected local file without entering chat.</desc>
 <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#858894"/></marker></defs>
 <rect width="1200" height="360" rx="18" fill="#0c0d12"/>
 <text x="56" y="54" fill="#a3e635" font-family="ui-monospace,monospace" font-size="14" font-weight="700" letter-spacing="2">SECURE HANDOFF FLOW</text>

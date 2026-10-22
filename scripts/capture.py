@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = ROOT / "scripts" / "secret_form.py"
-OUTPUT = ROOT / "docs" / "screenshots" / "terminal-vault.png"
+OUTPUT = ROOT / "docs" / "screenshots" / "secret-vault.png"
 
 spec = importlib.util.spec_from_file_location("secret_form", MODULE)
 if spec is None or spec.loader is None:

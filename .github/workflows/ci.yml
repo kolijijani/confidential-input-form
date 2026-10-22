@@ -30,7 +30,7 @@ jobs:
         run: |
           python3 -m pip install --quiet --upgrade pip setuptools wheel
           python3 -m pip install --quiet .
-          confidential-input-form --version
+          secret-vault --version
   lint:
     runs-on: ubuntu-latest
     steps:

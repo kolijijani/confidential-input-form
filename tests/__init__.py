@@ -1,1 +1,1 @@
-"""Terminal Vault test package."""
+"""Secret Vault test package."""

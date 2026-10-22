@@ -5,8 +5,8 @@
 **A one-shot, local-first form for handing secrets to AI agents without putting them in chat.**
 
 ![status](https://img.shields.io/badge/status-stable-success)
-[![CI](https://github.com/kolijijani/confidential-input-form/actions/workflows/ci.yml/badge.svg)](https://github.com/kolijijani/confidential-input-form/actions/workflows/ci.yml)
-[![release](https://img.shields.io/github/v/release/kolijijani/confidential-input-form?color=a3e635)](https://github.com/kolijijani/confidential-input-form/releases/latest)
+[![CI](https://github.com/kolijijani/secret-vault/actions/workflows/ci.yml/badge.svg)](https://github.com/kolijijani/secret-vault/actions/workflows/ci.yml)
+[![release](https://img.shields.io/github/v/release/kolijijani/secret-vault?color=a3e635)](https://github.com/kolijijani/secret-vault/releases/latest)
 ![python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![dependencies](https://img.shields.io/badge/dependencies-stdlib_only-15171f)
 ![platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS-lightgrey)
@@ -23,11 +23,11 @@ See it working (desktop view) — type a key, commit, the page closes itself:
 AI agents often need an API key, password, certificate, email address, or config file to finish a task.
 Pasting that value into chat puts it into model context, transcripts, and possibly tool logs.
 
-Terminal Vault opens a task-specific form on your own machine. The agent decides which fields are needed;
+Secret Vault opens a task-specific form on your own machine. The agent decides which fields are needed;
 the user submits directly to a protected local file. The server accepts one successful submission and
 exits; if nobody submits before the deadline it closes itself and writes nothing.
 
-The **Terminal Vault design stays fixed** while the form content adapts to each task.
+The **Secret Vault design stays fixed** while the form content adapts to each task.
 
 ## 📑 Table of contents
 
@@ -62,7 +62,7 @@ The **Terminal Vault design stays fixed** while the form content adapts to each 
 
 ## 🖼️ Preview
 
-![Terminal Vault adaptive confidential input form](docs/screenshots/terminal-vault.png)
+![Secret Vault adaptive form](docs/screenshots/secret-vault.png)
 
 *The running product: a task-specific email, signing-key, and paste-or-upload config form, with the
 15-minute countdown in the footer. All values are dummy/empty.*
@@ -76,7 +76,7 @@ python3 scripts/capture.py
 
 ## 🏗️ How it works
 
-![Terminal Vault secure handoff architecture](docs/architecture.svg)
+![Secret Vault secure handoff architecture](docs/architecture.svg)
 
 | Stage | Responsibility | Secret exposure |
 |---|---|---|
@@ -97,11 +97,11 @@ No third-party Python packages are required.
 ## ⚡ Installation
 
 ```sh
-git clone https://github.com/kolijijani/confidential-input-form.git
+git clone https://github.com/kolijijani/secret-vault.git
 ```
 
 ```sh
-cd confidential-input-form
+cd secret-vault
 ```
 
 Run it straight from a checkout with no install step:
@@ -113,11 +113,11 @@ python3 scripts/secret_form.py --version
 Install as a command with any Python tool manager (the script uses only the standard library):
 
 ```sh
-pipx install git+https://github.com/kolijijani/confidential-input-form.git
+pipx install git+https://github.com/kolijijani/secret-vault.git
 ```
 
 ```sh
-uvx --from git+https://github.com/kolijijani/confidential-input-form confidential-input-form --version
+uvx --from git+https://github.com/kolijijani/secret-vault secret-vault --version
 ```
 
 Teach your agent the skill — the installer copies `SKILL.md` into the agent's skill directory and
@@ -329,7 +329,7 @@ path owned by the current user.
 
 ## 🔐 Security
 
-Terminal Vault is a **local handoff utility**, not an internet-facing secret manager.
+Secret Vault is a **local handoff utility**, not an internet-facing secret manager.
 
 - Use localhost or a trusted private network such as Tailscale/VPN.
 - Treat the random URL as confidential until it is consumed.
