@@ -1,4 +1,6 @@
-# 🔐 Terminal Vault — Confidential Input Form
+<p align="center">
+  <img src="docs/banner.png" width="840" alt="// secret_vault — one-shot form for handing secrets to an agent">
+</p>
 
 **A one-shot, local-first form for handing secrets to AI agents without putting them in chat.**
 
@@ -9,6 +11,12 @@
 ![dependencies](https://img.shields.io/badge/dependencies-stdlib_only-15171f)
 ![platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS-lightgrey)
 ![license](https://img.shields.io/badge/license-MIT-blue)
+
+See it working — type a key, commit, the page closes itself:
+
+<p align="center">
+  <img src="docs/screenshots/demo.gif" width="300" alt="Demo: typing a key into the form, submitting, and the page closing itself">
+</p>
 
 ## 📖 Overview
 
@@ -59,9 +67,6 @@ The **Terminal Vault design stays fixed** while the form content adapts to each 
 *The running product: a task-specific email, signing-key, and paste-or-upload config form, with the
 15-minute countdown in the footer. All values are dummy/empty.*
 
-See it run — fill the form, it writes the file and closes itself:
-
-<img src="docs/screenshots/demo.gif" width="300" alt="Demo: typing a key into the form, submitting, and the page closing itself">
 
 Regenerate the capture with Chrome or Chromium:
 
@@ -252,6 +257,7 @@ python3 scripts/secret_form.py --bind 100.x.y.z --spec examples/api-key.json
 ├── .github/workflows/ci.yml       # Multi-version Python CI
 ├── docs/
 │   ├── architecture.svg           # Secure handoff flow
+│   ├── banner.png                 # 1280x320 README header (scripts/make_banner.py)
 │   ├── social-preview.png         # 1280x640 card for GitHub link previews
 │   └── screenshots/               # Real product captures
 ├── docs/agents.md                 # Per-agent skill install matrix
