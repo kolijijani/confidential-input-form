@@ -62,6 +62,7 @@ On success the server writes values, shows a confirmation, and exits (one-shot).
 Values are NEVER echoed back, NEVER logged.
 """
 import argparse
+import datetime
 import email.parser
 import email.policy
 import html
@@ -75,8 +76,11 @@ import socketserver
 import stat
 import sys
 import threading
+import time
 import urllib.parse
 
+__version__ = "1.1.0"
+EXPIRY_GRACE_SECONDS = 5  # keep the socket up briefly so a late visit sees the expired page
 DEF_ENV = os.path.expanduser("~/.config/secret-vault/secrets.env")
 ALLOWED_TYPES = {"text", "password", "textarea", "code", "file", "dual"}
 KEY_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
@@ -99,9 +103,14 @@ def validate_spec(spec):
     return spec
 
 
-def validate_bind(bind):
+def validate_bind(bind, allow_wildcard=False):
     if ":" in bind:
         raise ValueError("IPv6 bind addresses are not supported")
+    if bind.strip() in ("", "*", "0.0.0.0") and not allow_wildcard:
+        raise ValueError(
+            "refusing to bind a wildcard address: pass an explicit interface "
+            "(e.g. 127.0.0.1 or your private-network IP) or --allow-wildcard"
+        )
     return bind
 
 
@@ -120,7 +129,11 @@ def public_host(bind):
 
 def _spec_from_args(args):
     if args.spec:
-        raw = sys.stdin.read() if args.spec == "-" else open(args.spec).read()
+        if args.spec == "-":
+            raw = sys.stdin.read()
+        else:
+            with open(args.spec, encoding="utf-8") as fh:
+                raw = fh.read()
         spec = json.loads(raw)
         spec.setdefault("title", "Confidential input")
         spec.setdefault("target", DEF_ENV)
@@ -176,11 +189,33 @@ def render_field(i, f, multipart):
     return f'<label>{lbl}{opt}</label>{inp}'
 
 
-def build_page(spec, token, multipart):
+def build_page(spec, token, multipart, expires_seconds=None):
     title = html.escape(str(spec.get("title", "Confidential input")))
     subtitle = html.escape(str(spec.get("subtitle", "Enter the requested information below")))
     fields = "\n".join(render_field(i, f, multipart) for i, f in enumerate(spec["fields"]))
     enc = ' enctype="multipart/form-data"' if multipart else ""
+    if expires_seconds:
+        note = ('target: protected file · mode: 0600 · single use'
+                '<br>This page closes in <span id="cd">--:--</span> or after the first save.')
+        countdown = f"""
+<script>
+(function(){{
+  var left = {int(expires_seconds)};
+  var el = document.getElementById('cd');
+  function tick(){{
+    if(left <= 0){{ el.textContent = 'expired'; return; }}
+    var m = Math.floor(left/60), s = left % 60;
+    el.textContent = m + ':' + (s<10?'0':'') + s;
+    left -= 1;
+    setTimeout(tick, 1000);
+  }}
+  tick();
+}})();
+</script>"""
+    else:
+        note = ('target: protected file · mode: 0600 · single use'
+                '<br>Values never return to chat or logs. Use only on localhost or a trusted private network.')
+        countdown = ""
     return f"""<!doctype html><html><head><meta charset="utf-8">
 <title>{title}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -226,14 +261,18 @@ function dualPick(i, which){{
 {fields}
     <button type="submit">[ commit securely ]</button>
   </form>
-  <div class="note">target: protected file · mode: 0600 · expiry: after first save<br>Values never return to chat or logs. Use only on localhost or a trusted private network.</div>
+  <div class="note">{note}</div>
  </section>
-</main></body></html>"""
+</main>{countdown}</body></html>"""
 
 
 DONE = """<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Saved</title>
 <style>*{box-sizing:border-box}body{font-family:Inter,system-ui;background:#0c0d12;color:#e8e7ed;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:24px}.card{background:#15171f;border:1px solid #30333d;border-radius:20px;padding:34px;text-align:center;max-width:480px}.brand{font-weight:850}.brand span,h1{color:#a3e635}h1{font-size:34px;letter-spacing:-.04em;margin:28px 0 10px}p{color:#a8a8b3;line-height:1.55}.tag{font:11px ui-monospace,monospace;color:#a3e635;border:1px solid #a3e635;border-radius:999px;padding:7px 11px;display:inline-block;margin-top:18px}</style>
 </head><body><div class="card" id="secret_vault"><div class="brand">// secret<span>_vault</span></div><h1>Saved securely.</h1><p>The value was written directly to its protected target.<br>This one-time page can now be closed.</p><div class="tag">CHANNEL CLOSED</div></div></body></html>"""
+
+EXPIRED = """<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Expired</title>
+<style>*{box-sizing:border-box}body{font-family:Inter,system-ui;background:#0c0d12;color:#e8e7ed;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:24px}.card{background:#15171f;border:1px solid #30333d;border-radius:20px;padding:34px;text-align:center;max-width:480px}.brand{font-weight:850}.brand span,h1{color:#a3e635}h1{font-size:34px;letter-spacing:-.04em;margin:28px 0 10px}p{color:#a8a8b3;line-height:1.55}.tag{font:11px ui-monospace,monospace;color:#a3e635;border:1px solid #a3e635;border-radius:999px;padding:7px 11px;display:inline-block;margin-top:18px}</style>
+</head><body><div class="card" id="secret_vault"><div class="brand">// secret<span>_vault</span></div><h1>This form expired.</h1><p>No values were written.<br>Ask the agent for a fresh link if you still need to hand over a secret.</p><div class="tag">CHANNEL CLOSED</div></div></body></html>"""
 
 
 def _reject_symlink(path):
@@ -398,6 +437,24 @@ def save_upload(directory, client_filename, data, random_name=None):
     raise OSError("could not allocate a unique upload name")
 
 
+def write_audit(path, outcome, keys, nbytes):
+    """Append a value-free audit line: time, outcome, field names, byte count."""
+    if not path:
+        return
+    try:
+        target = os.path.expanduser(path)
+        stamp = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+        line = f"{stamp}\t{outcome}\tfields={','.join(keys)}\tbytes={nbytes}\n"
+        with open(target, "a", encoding="utf-8") as fh:
+            fh.write(line)
+        try:
+            os.chmod(target, 0o600)
+        except OSError:
+            pass
+    except OSError:
+        pass
+
+
 class ClaimState:
     def __init__(self):
         self._lock = threading.Lock()
@@ -434,6 +491,14 @@ def main():
     ap.add_argument("--port", type=int, default=8731)
     ap.add_argument("--max-bytes", type=int, default=5 * 1024 * 1024,
                     help="maximum request body size (default: 5 MiB)")
+    ap.add_argument("--expire-minutes", type=float, default=15.0,
+                    help="close the form after this many minutes (default: 15; 0 = never)")
+    ap.add_argument("--allow-wildcard", action="store_true",
+                    help="allow binding 0.0.0.0 (not recommended)")
+    ap.add_argument("--audit-log", default=None,
+                    help="append a value-free line per submission to this file")
+    ap.add_argument("--version", action="version",
+                    version=f"confidential-input-form {__version__}")
     args = ap.parse_args()
 
     spec = validate_spec(_spec_from_args(args))
@@ -444,8 +509,10 @@ def main():
     mode = spec.get("mode", "env")  # "env" = KEY=VALUE, "file" = write content to target
     has_file = any(f.get("type") in ("file", "dual") for f in spec["fields"])
     token = secrets.token_urlsafe(16)
-    page = build_page(spec, token, has_file).encode()
+    expires_seconds = int(args.expire_minutes * 60) if args.expire_minutes > 0 else None
+    page = build_page(spec, token, has_file, expires_seconds).encode()
     claim_state = ClaimState()
+    expired = threading.Event()
 
     class H(http.server.BaseHTTPRequestHandler):
         protocol_version = "HTTP/1.1"
@@ -458,6 +525,15 @@ def main():
             supplied = urllib.parse.parse_qs(parsed.query).get("t", [""])[0]
             if parsed.path != "/" or not secrets.compare_digest(supplied, token):
                 self.send_error(404); return
+            if expired.is_set():
+                body = EXPIRED.encode()
+                self.send_response(410)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Cache-Control", "no-store")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+                return
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Cache-Control", "no-store")
@@ -479,6 +555,8 @@ def main():
             supplied = urllib.parse.parse_qs(parsed.query).get("t", [""])[0]
             if parsed.path != "/save" or not secrets.compare_digest(supplied, token):
                 self.send_error(404); return
+            if expired.is_set():
+                self.send_error(410, "form expired"); return
             if not claim_state.try_claim():
                 self.send_error(409, "submission already claimed"); return
             try:
@@ -531,6 +609,8 @@ def main():
                 except OSError:
                     claim_state.release(); self.send_error(400, "unsafe target"); return
                 claim_state.consume()
+                write_audit(args.audit_log, "saved-file", [spec["fields"][0]["key"]],
+                            len(data) if isinstance(data, bytes) else len(data.encode()))
                 body = DONE.encode()
                 self.send_response(200)
                 self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -595,6 +675,7 @@ def main():
             except (OSError, ValueError):
                 claim_state.release(); self.send_error(400, "unsafe value or target"); return
             claim_state.consume()
+            write_audit(args.audit_log, "saved-env", sorted(kv), sum(len(v) for v in kv.values()))
             body = DONE.encode()
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -604,7 +685,7 @@ def main():
             threading.Thread(target=self.server.shutdown, daemon=True).start()
 
     try:
-        bind = validate_bind(args.bind)
+        bind = validate_bind(args.bind, args.allow_wildcard)
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
     with socketserver.ThreadingTCPServer((bind, args.port), H) as httpd:
@@ -612,9 +693,30 @@ def main():
         host = public_host(bind)
         print(f"URL: http://{host}:{args.port}/?t={token}")
         print(f"TARGET: {target}")
+        if expires_seconds:
+            print(f"EXPIRES: {expires_seconds}s")
         print("Waiting for one submission...")
-        httpd.serve_forever()
-    print("Saved; server stopped.")
+        timer = None
+        if expires_seconds:
+            def _expire():
+                # Mark the form dead first (POST/GET now answer 410), then keep the
+                # socket alive for a short grace period so a late visitor gets a page
+                # instead of a bare connection-refused error.
+                expired.set()
+                time.sleep(EXPIRY_GRACE_SECONDS)
+                httpd.shutdown()
+            timer = threading.Timer(expires_seconds, _expire)
+            timer.daemon = True
+            timer.start()
+        try:
+            httpd.serve_forever()
+        finally:
+            if timer is not None:
+                timer.cancel()
+    if expired.is_set():
+        print("Expired; server stopped, nothing written.")
+    else:
+        print("Saved; server stopped.")
 
 
 if __name__ == "__main__":

@@ -169,7 +169,6 @@ class SecretFormTests(unittest.TestCase):
             self.assertEqual(list(victim.iterdir()), [])
 
     def test_multipart_is_binary_safe_with_quoted_boundary(self):
-        boundary = "AaB03x"
         binary = b"\x00alpha\r\n--not-the-boundary--\xff\r\n--hyphens--\r\n"
         body = (
             b"--AaB03x\r\n"
@@ -241,7 +240,44 @@ class SecretFormTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             mod.validate_bind("::")
         self.assertEqual(mod.validate_bind("127.0.0.1"), "127.0.0.1")
-        self.assertEqual(mod.validate_bind("0.0.0.0"), "0.0.0.0")
+
+    def test_wildcard_bind_is_denied_unless_explicitly_allowed(self):
+        for wildcard in ("0.0.0.0", "*", ""):
+            with self.assertRaises(ValueError):
+                mod.validate_bind(wildcard)
+            self.assertEqual(mod.validate_bind(wildcard, allow_wildcard=True), wildcard)
+
+    def test_page_reports_single_use_and_optional_countdown(self):
+        form = {"title": "T", "fields": [{"key": "K", "label": "Key", "type": "password"}]}
+        plain = mod.build_page(mod.validate_spec(form), "tok", False)
+        self.assertIn("single use", plain)
+        self.assertNotIn("closes in", plain)
+        self.assertNotIn("expiry: after first save", plain)
+
+        timed = mod.build_page(mod.validate_spec(form), "tok", False, expires_seconds=600)
+        self.assertIn('id="cd"', timed)
+        self.assertIn("closes in", timed)
+        self.assertIn("var left = 600", timed)
+
+    def test_expired_page_is_available_and_has_no_secret(self):
+        self.assertIn("This form expired", mod.EXPIRED)
+        self.assertIn("secret_vault", mod.EXPIRED)
+
+    def test_audit_line_has_fields_and_bytes_but_no_values(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "audit.log")
+            mod.write_audit(path, "saved-env", ["API_KEY", "ACCOUNT"], 42)
+            mod.write_audit(None, "saved-env", ["X"], 1)  # no-op
+            with open(path, encoding="utf-8") as fh:
+                text = fh.read()
+            self.assertEqual(stat.S_IMODE(os.stat(path).st_mode), 0o600)
+            self.assertIn("saved-env", text)
+            self.assertIn("fields=API_KEY,ACCOUNT", text)
+            self.assertIn("bytes=42", text)
+            self.assertNotIn("secret", text)
+
+    def test_version_string_exists(self):
+        self.assertRegex(mod.__version__, r"^\d+\.\d+\.\d+$")
 
 
 if __name__ == "__main__":

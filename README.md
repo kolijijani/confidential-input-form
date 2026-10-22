@@ -44,9 +44,11 @@ The **Terminal Vault design stays fixed** while the form content adapts to each 
 - Writes environment files or complete raw files such as JSON, YAML, PEM, and config files.
 - Uses atomic mode-`0600` writes, symlink rejection, and random server-side upload names.
 - Protects the form with a random URL token and a locked single-claim submission state.
+- Closes itself after a deadline you set (`--expire-minutes`, 15 by default) and refuses wildcard binds.
 - Preserves binary uploads with bounded, standards-aware multipart parsing.
 - Runs on the Python standard library—no package installation required.
-- Includes an agent-ready `SKILL.md`, practical examples, CI, and 21 regression tests.
+- Emits an optional value-free audit line per submission (`--audit-log`).
+- Includes an agent-ready `SKILL.md`, an `install.sh`, practical examples, CI, and 32 tests (unit + real-socket end-to-end).
 
 ## 🖼️ Preview
 
@@ -90,8 +92,34 @@ git clone https://github.com/kolijijani/confidential-input-form.git
 cd confidential-input-form
 ```
 
-Optional: copy `SKILL.md` into your AI agent's skill directory and point the skill's script path to
-this checkout.
+Run it straight from a checkout with no install step:
+
+```sh
+python3 scripts/secret_form.py --version
+```
+
+Install as a command with any Python tool manager (the script uses only the standard library):
+
+```sh
+pipx install git+https://github.com/kolijijani/confidential-input-form.git
+```
+
+```sh
+uvx --from git+https://github.com/kolijijani/confidential-input-form confidential-input-form --version
+```
+
+Teach your agent the skill — the installer copies `SKILL.md` into the agent's skill directory and
+rewrites the script path to this checkout:
+
+```sh
+./install.sh              # auto-detects ~/.hermes/skills, ~/.claude/skills, ~/.agents/skills
+```
+
+```sh
+./install.sh ~/.claude/skills   # or name the directory explicitly
+```
+
+See [`docs/agents.md`](docs/agents.md) for the per-agent matrix (Hermes, Claude Code, Codex, Cursor).
 
 ## 🎯 Usage
 
@@ -106,10 +134,12 @@ The command prints a one-time URL and waits for one successful submission:
 ```text
 URL: http://127.0.0.1:8731/?t=<random-token>
 TARGET: /home/user/.config/secret-vault/provider.env
+EXPIRES: 900s
 Waiting for one submission...
 ```
 
 Open the URL on the same machine. After submission, the server writes the target and exits.
+If nobody submits before the deadline, the server exits and writes nothing.
 
 ### 🧩 Adaptive form example
 
@@ -139,6 +169,38 @@ Use `mode: "file"` when the submitted content is the target file itself:
 python3 scripts/secret_form.py --spec examples/config-file.json
 ```
 
+### ⏱️ Expiry and single use
+
+The form is one-shot: the first successful save closes it. It also has a deadline, so an abandoned
+link never stays open:
+
+```sh
+python3 scripts/secret_form.py --spec examples/api-key.json --expire-minutes 20
+```
+
+`--expire-minutes` defaults to 15; pass `0` to disable the deadline. When the deadline passes the
+page returns `410 Gone` with an "This form expired" notice and no values are written. After the
+process exits, the port is closed and the token is useless.
+
+For OS-level belt-and-braces on a shared machine, wrap the process in a hard kill as well:
+
+```sh
+systemd-run --user --unit=secret-form --property=RuntimeMaxSec=900 --collect \
+  python3 scripts/secret_form.py --bind 127.0.0.1 --spec examples/api-key.json
+```
+
+### 🧾 Audit log
+
+`--audit-log PATH` appends one line per submission with the timestamp, outcome, field **names** and
+byte count — never values:
+
+```text
+2026-10-22T04:31:07+00:00	saved-env	fields=MAIL_FROM,SIGNING_KEY	bytes=88
+```
+
+It is written `0600` and is useful when an agent needs to prove a handoff happened without touching
+the secret.
+
 ## ⚙️ Configuration
 
 ### Field types
@@ -163,8 +225,14 @@ python3 scripts/secret_form.py --spec examples/config-file.json
 | `--port` | `8731` | Local TCP port |
 | `--max-bytes` | `5242880` | Maximum request body size |
 | `--files-dir` | target-adjacent `secret_files/` | Upload storage directory |
+| `--expire-minutes` | `15` | Close the form after N minutes; `0` disables the deadline |
+| `--allow-wildcard` | off | Permit `--bind 0.0.0.0` (denied by default) |
+| `--audit-log` | none | Append a value-free line per submission |
+| `--version` | — | Print the version and exit |
 
-To open the form from another device, bind to the machine's IPv4 address on a trusted VPN or LAN:
+Wildcard binds are refused unless you pass `--allow-wildcard`, so a typo cannot quietly expose the
+form on every interface. To open the form from another device, bind the machine's IPv4 address on a
+trusted VPN or LAN:
 
 ```sh
 python3 scripts/secret_form.py --bind 100.x.y.z --spec examples/api-key.json
@@ -178,11 +246,16 @@ python3 scripts/secret_form.py --bind 100.x.y.z --spec examples/api-key.json
 ├── docs/
 │   ├── architecture.svg           # Secure handoff flow
 │   └── screenshots/               # Real product captures
+├── docs/agents.md                 # Per-agent skill install matrix
 ├── examples/                      # Ready-to-run JSON specs
+├── install.sh                     # Copy SKILL.md into an agent skill dir
+├── pyproject.toml                 # Console script (pipx / uvx installable)
 ├── scripts/
 │   ├── capture.py                 # Reproducible screenshot capture
 │   └── secret_form.py             # One-shot server and renderer
-├── tests/test_secret_form.py      # Security and behavior regression tests
+├── tests/
+│   ├── test_secret_form.py        # Unit tests: rendering, writes, parsing
+│   └── test_e2e.py                # Real-socket tests: save, expiry, audit
 ├── CHANGELOG.md
 ├── LICENSE
 ├── README.md

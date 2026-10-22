@@ -123,16 +123,22 @@ JSON
 ### Flags
 `--target` file to write (default `~/.config/secret-vault/secrets.env`, mode 600)
 `--files-dir` where uploads land
-`--bind` / `--port` (default `127.0.0.1:8731`; bind to a private-network interface when needed)
+`--bind` / `--port` (default `127.0.0.1:8731`; bind to a private-network interface when needed —
+`0.0.0.0` is refused unless `--allow-wildcard` is passed)
+`--expire-minutes` deadline in minutes (default 15; `0` disables it)
+`--audit-log` append a value-free line per submission (time, outcome, field names, byte count)
+`--version` print the version and exit
 
 ## Run it (background) then hand over the URL
 ```
-python3 scripts/secret_form.py --spec /tmp/spec.json
+python3 scripts/secret_form.py --bind <private-ip> --spec /tmp/spec.json --expire-minutes 20
 ```
-It prints e.g. `URL: http://<private-ip>:8731/?t=<token>`.
+It prints e.g. `URL: http://<private-ip>:8731/?t=<token>` and `EXPIRES: 1200s`.
 Give that URL to the intended user over a private channel. The token means only the link holder can submit.
 The server writes values straight to the target (never echoed, never logged) and
-exits after the first successful save.
+exits after the first successful save. If nobody submits before the deadline it exits and writes
+nothing, so an abandoned link never stays open — raise `--expire-minutes` for multi-file tasks
+instead of leaving the form open indefinitely.
 
 ## After he says "dah simpan"
 1. Verify keys/content exist WITHOUT printing values:
@@ -150,6 +156,7 @@ makes it available to your scripts but never to the conversation.
 ## Pitfalls
 
 - **Never echo or log secret values.** The server writes directly to the target file; never print values to stdout. When verifying, check existence with `grep -q` or `test -s`, never `cat`.
+- **Wildcard binds are refused.** `--bind 0.0.0.0` exits with an error: pass the actual localhost or private-network address so the form cannot appear on an interface you did not intend.
 - **One-shot server exits after first save.** If the user refreshes or submits twice, the server is already gone. Tell the user to fill everything in one go.
 - **Token in URL is the only access control.** Anyone with the link can submit. Share the URL only with the intended user through a private channel.
 - **`dual` fields need both paste and upload handling in POST.** The server checks `f<paste>` first, then `f<upload>_file`. If paste is blank, it falls back to the uploaded file. Test both paths before deploying.

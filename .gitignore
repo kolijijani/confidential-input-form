@@ -5,3 +5,6 @@ __pycache__/
 *.key
 secrets/
 secret_files/
+build/
+dist/
+*.egg-info/
