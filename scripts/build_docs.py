@@ -212,10 +212,13 @@ cd secret-vault
 python3 scripts/secret_form.py --version''')}
 
 <h2>Install as a command</h2>
+{code('''pipx install agent-secret-form''')}
+{code('''uvx --from agent-secret-form secret-vault --version''')}
+<p>The distribution on PyPI is <strong><code>agent-secret-form</code></strong>; the console command stays
+<code>secret-vault</code>. Installing from Git also works:</p>
 {code('''pipx install git+https://github.com/kolijijani/secret-vault.git''')}
-{code('''uvx --from git+https://github.com/kolijijani/secret-vault secret-vault --version''')}
 <div class="warn">Do not <code>pip install secret-vault</code>: that name on PyPI belongs to an unrelated
-project. Install from the Git URL shown above, or from a checkout.</div>
+project.</div>
 
 <h2>Install the agent skill</h2>
 <p>The installer copies <code>SKILL.md</code> into the agent's skill directory and rewrites the script path

@@ -3,8 +3,8 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "secret-vault"
-version = "1.2.0"
+name = "agent-secret-form"
+version = "1.3.0"
 description = "One-shot local form for handing secrets to AI agents without putting them in chat."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -27,9 +27,11 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/kolijijani/secret-vault"
+Homepage = "https://kolijijani.github.io/secret-vault/"
+Documentation = "https://kolijijani.github.io/secret-vault/"
 Source = "https://github.com/kolijijani/secret-vault"
 Issues = "https://github.com/kolijijani/secret-vault/issues"
+Changelog = "https://kolijijani.github.io/secret-vault/changelog.html"
 
 [project.scripts]
 secret-vault = "secret_form:main"

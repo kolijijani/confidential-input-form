@@ -48,10 +48,13 @@ cd secret-vault
 python3 scripts/secret_form.py --version</code></pre>
 
 <h2>Install as a command</h2>
+<pre><code>pipx install agent-secret-form</code></pre>
+<pre><code>uvx --from agent-secret-form secret-vault --version</code></pre>
+<p>The distribution on PyPI is <strong><code>agent-secret-form</code></strong>; the console command stays
+<code>secret-vault</code>. Installing from Git also works:</p>
 <pre><code>pipx install git+https://github.com/kolijijani/secret-vault.git</code></pre>
-<pre><code>uvx --from git+https://github.com/kolijijani/secret-vault secret-vault --version</code></pre>
 <div class="warn">Do not <code>pip install secret-vault</code>: that name on PyPI belongs to an unrelated
-project. Install from the Git URL shown above, or from a checkout.</div>
+project.</div>
 
 <h2>Install the agent skill</h2>
 <p>The installer copies <code>SKILL.md</code> into the agent's skill directory and rewrites the script path
@@ -72,7 +75,7 @@ and a countdown.</p>
 no longer want.</p>
 </main>
 <footer class="site"><div class="wrap">
-  <span>MIT · v1.2.0 · maintained by <a href="https://github.com/kolijijani">Mohammad Koliji Jani Bin Azizan</a></span>
+  <span>MIT · v1.3.0 · maintained by <a href="https://github.com/kolijijani">Mohammad Koliji Jani Bin Azizan</a></span>
   <span><a href="https://github.com/kolijijani/secret-vault">GitHub</a> · <a href="https://github.com/kolijijani/secret-vault/issues">Issues</a> · <a href="https://github.com/kolijijani/secret-vault/blob/main/SECURITY.md">Security</a></span>
 </div></footer>
 </body>

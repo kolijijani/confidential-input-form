@@ -127,8 +127,18 @@ pipx install git+https://github.com/kolijijani/secret-vault.git
 uvx --from git+https://github.com/kolijijani/secret-vault secret-vault --version
 ```
 
-The PyPI name `secret-vault` belongs to an unrelated project — always install from the Git URL above,
-never with a bare `pip install secret-vault`.
+Or from PyPI, where the distribution is published as **`agent-secret-form`** (the console command is
+still `secret-vault`):
+
+```sh
+pipx install agent-secret-form
+```
+
+```sh
+uvx --from agent-secret-form secret-vault --version
+```
+
+Do not `pip install secret-vault` — that name on PyPI belongs to an unrelated project.
 
 Teach your agent the skill — the installer copies `SKILL.md` into the agent's skill directory and
 rewrites the script path to this checkout:

@@ -79,7 +79,7 @@ import threading
 import time
 import urllib.parse
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 EXPIRY_GRACE_SECONDS = 5  # keep the socket up briefly so a late visit sees the expired page
 DEF_ENV = os.path.expanduser("~/.config/secret-vault/secrets.env")
 ALLOWED_TYPES = {"text", "password", "textarea", "code", "file", "dual"}
