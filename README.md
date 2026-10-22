@@ -59,6 +59,10 @@ The **Terminal Vault design stays fixed** while the form content adapts to each 
 *The running product: a task-specific email, signing-key, and paste-or-upload config form, with the
 15-minute countdown in the footer. All values are dummy/empty.*
 
+See it run — fill the form, it writes the file and closes itself:
+
+<img src="docs/screenshots/demo.gif" width="300" alt="Demo: typing a key into the form, submitting, and the page closing itself">
+
 Regenerate the capture with Chrome or Chromium:
 
 ```sh
@@ -248,6 +252,7 @@ python3 scripts/secret_form.py --bind 100.x.y.z --spec examples/api-key.json
 ├── .github/workflows/ci.yml       # Multi-version Python CI
 ├── docs/
 │   ├── architecture.svg           # Secure handoff flow
+│   ├── social-preview.png         # 1280x640 card for GitHub link previews
 │   └── screenshots/               # Real product captures
 ├── docs/agents.md                 # Per-agent skill install matrix
 ├── examples/                      # Ready-to-run JSON specs
