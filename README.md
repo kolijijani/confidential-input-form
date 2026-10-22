@@ -21,7 +21,7 @@ See it working (desktop view) — type a key, commit, the page closes itself:
   <img src="docs/screenshots/demo.gif" width="760" alt="Demo: typing a key into the form, submitting, and the page closing itself">
 </p>
 
-## 📖 Overview
+## 📖 What Secret Vault does
 
 AI agents often need an API key, password, certificate, email address, or config file to finish a task.
 Pasting that value into chat puts it into model context, transcripts, and possibly tool logs.
@@ -34,20 +34,21 @@ The **Secret Vault design stays fixed** while the form content adapts to each ta
 
 ## 📑 Table of contents
 
-- [Features](#-features)
-- [Preview](#-preview)
-- [How it works](#️-how-it-works)
-- [Requirements](#-requirements)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Configuration](#️-configuration)
-- [Project structure](#-project-structure)
-- [Development](#️-development)
-- [Release](#-release)
-- [Troubleshooting](#-troubleshooting)
-- [Security](#-security)
-- [Limitations](#️-limitations)
-- [Changelog](#-changelog)
+- [📖 What Secret Vault does](#-what-secret-vault-does)
+- [✨ Features](#-features)
+- [🖼️ Preview](#️-preview)
+- [🏗️ How it works](#️-how-it-works)
+- [🧰 Requirements](#-requirements)
+- [⚡ Installation](#-installation)
+- [🎯 Usage — hand a key to an agent from a form](#-usage--hand-a-key-to-an-agent-from-a-form)
+- [⚙️ Configuration](#️-configuration)
+- [📁 Project structure](#-project-structure)
+- [🛠️ Development](#️-development)
+- [📦 Release](#-release)
+- [🩺 Troubleshooting — localhost only, port in use, expired token](#-troubleshooting--localhost-only-port-in-use-expired-token)
+- [🔐 Security — what it protects and what it does not](#-security--what-it-protects-and-what-it-does-not)
+- [🗺️ Limitations](#️-limitations)
+- [📝 Changelog](#-changelog)
 
 ## ✨ Features
 
@@ -142,7 +143,7 @@ rewrites the script path to this checkout:
 
 See [`docs/agents.md`](docs/agents.md) for the per-agent matrix (Hermes, Claude Code, Codex, Cursor).
 
-## 🎯 Usage
+## 🎯 Usage — hand a key to an agent from a form
 
 Start the included API-key example:
 
@@ -311,7 +312,7 @@ A release is ready when:
 4. `CHANGELOG.md` is updated.
 5. The version tag and GitHub release are published from the same commit.
 
-## 🩺 Troubleshooting
+## 🩺 Troubleshooting — localhost only, port in use, expired token
 
 ### The URL works only on the server machine
 
@@ -336,7 +337,7 @@ process to collect another value.
 That is deliberate protection against redirecting a secret into an unexpected file. Use a regular file
 path owned by the current user.
 
-## 🔐 Security
+## 🔐 Security — what it protects and what it does not
 
 Secret Vault is a **local handoff utility**, not an internet-facing secret manager.
 
