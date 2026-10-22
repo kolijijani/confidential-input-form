@@ -48,7 +48,7 @@ The **Terminal Vault design stays fixed** while the form content adapts to each 
 - Preserves binary uploads with bounded, standards-aware multipart parsing.
 - Runs on the Python standard library—no package installation required.
 - Emits an optional value-free audit line per submission (`--audit-log`).
-- Includes an agent-ready `SKILL.md`, an `install.sh`, practical examples, CI, and 32 tests (unit + real-socket end-to-end).
+- Includes an agent-ready `SKILL.md`, an `install.sh`, practical examples, CI, and 33 tests (unit + real-socket end-to-end).
 
 ## 🖼️ Preview
 

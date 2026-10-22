@@ -1,0 +1,72 @@
+name: Bug report
+description: Something behaved differently from what the README or SKILL.md promises
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. **Never paste a real secret here.** Redact tokens, keys and targets
+        before submitting. Security-sensitive issues belong in the private flow described in
+        SECURITY.md, not in a public issue.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: The actual behaviour, including the HTTP status or the exact command output.
+      placeholder: The form returned 400 after I submitted a service-account JSON...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      placeholder: It should have written the file and closed itself.
+    validations:
+      required: true
+  - type: textarea
+    id: spec
+    attributes:
+      label: Form spec (redacted)
+      description: The JSON spec you passed, with targets and labels you are happy to publish.
+      render: json
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `confidential-input-form --version` (or the tag you cloned).
+      placeholder: confidential-input-form 1.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How did you run it
+      options:
+        - git clone + python3 scripts/secret_form.py
+        - pipx / uvx installed command
+        - install.sh into an agent skill directory
+        - other (say so below)
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Platform
+      placeholder: Ubuntu 24.04 / macOS 15 / python 3.12
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Output
+      description: Server output and the failing step. Confirm no secret value appears in it.
+      render: text
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before submitting
+      options:
+        - label: I removed every real credential from this report.
+          required: true
+        - label: I searched existing issues for the same behaviour.
+          required: true

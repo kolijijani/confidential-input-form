@@ -2,6 +2,19 @@
 
 All notable changes to Terminal Vault are documented here.
 
+## [Unreleased]
+
+### Added
+
+- `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, issue templates (bug, feature, accessibility), a pull
+  request template, and `ACCESSIBILITY.md` with an honest list of known gaps.
+
+### Fixed
+
+- Form fields are now programmatically labelled (`<label for>` → `<input id>`), including the
+  `dual` paste/upload pair, so screen readers announce each field with its name.
+- The "(optional)" micro-label contrast was raised above 4.5:1.
+
 ## [1.1.0] - 2026-10-22
 
 ### Added

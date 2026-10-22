@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/kolijijani/confidential-input-form/security/advisories/new
+    about: Do not open a public issue for a vulnerability, and never include real credentials.
+  - name: Read the threat model first
+    url: https://github.com/kolijijani/confidential-input-form/blob/main/SECURITY.md
+    about: What this tool protects against, and what it does not.
+  - name: Agent install matrix
+    url: https://github.com/kolijijani/confidential-input-form/blob/main/docs/agents.md
+    about: Where SKILL.md goes for Hermes, Claude Code, Codex and Cursor.

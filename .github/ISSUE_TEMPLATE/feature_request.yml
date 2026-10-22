@@ -1,0 +1,44 @@
+name: Feature request
+description: Suggest a capability, or a change to how the form behaves
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to do that the project makes hard today?
+      placeholder: I hand over three different provider keys in one session and ...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+      description: What should happen instead? A flag, a field type, a page change, a doc fix?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+      description: Including "do nothing" — sometimes the answer is a README line.
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Which part of the project
+      options:
+        - The form page (HTML/CSS/JS)
+        - The server or CLI flags
+        - Field types and spec schema
+        - Agent skill (SKILL.md) and install flow
+        - Docs
+    validations:
+      required: true
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Project constraints
+      options:
+        - label: This can be done with the Python standard library only.
+        - label: This keeps secret values out of logs, chat, and HTTP responses.
+        - label: This does not require Windows support.

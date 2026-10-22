@@ -276,6 +276,23 @@ class SecretFormTests(unittest.TestCase):
             self.assertIn("bytes=42", text)
             self.assertNotIn("secret", text)
 
+    def test_labels_are_programmatically_associated(self):
+        form = {"title": "T", "fields": [
+            {"key": "A", "label": "Alpha", "type": "text"},
+            {"key": "B", "label": "Beta", "type": "password"},
+            {"key": "C", "label": "Gamma", "type": "dual"},
+            {"key": "D", "label": "Delta", "type": "code"},
+        ]}
+        page = mod.build_page(mod.validate_spec(form), "tok", True)
+        for i, label in enumerate(("Alpha", "Beta", "Gamma", "Delta")):
+            self.assertIn(f'<label for="f{i}">{label}', page)
+        self.assertIn('id="f0"', page)
+        self.assertIn('id="f1"', page)
+        self.assertIn('id="f2_paste"', page)
+        self.assertIn('id="f2_file"', page)
+        self.assertIn('id="f3"', page)
+        self.assertEqual(page.count('<label for="f2">'), 1)
+
     def test_version_string_exists(self):
         self.assertRegex(mod.__version__, r"^\d+\.\d+\.\d+$")
 

@@ -1,0 +1,52 @@
+name: Accessibility report
+description: Something on the form page is hard or impossible to use with assistive technology
+labels: ["accessibility"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read `ACCESSIBILITY.md` first — it lists the known gaps so we do not re-litigate them.
+        **Never include a real secret.** If the problem also leaks a value, use the private flow
+        in `SECURITY.md` instead of an issue.
+  - type: textarea
+    id: barrier
+    attributes:
+      label: The barrier
+      description: What you tried, and where it broke down.
+      placeholder: With VoiceOver on iOS the paste/upload buttons are not announced as a choice...
+    validations:
+      required: true
+  - type: input
+    id: at
+    attributes:
+      label: Assistive technology and browser
+      placeholder: NVDA 2025.1 with Firefox 140 / VoiceOver with Safari 18
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Device and platform
+      placeholder: iPhone 15, iOS 18.4 / Windows 11
+    validations:
+      required: true
+  - type: dropdown
+    id: wcag
+    attributes:
+      label: Related WCAG 2.1 success criterion (if you know it)
+      options:
+        - Not sure
+        - 1.3.1 Info and relationships
+        - 1.4.3 Contrast (minimum)
+        - 2.1.1 Keyboard
+        - 2.4.7 Focus visible
+        - 3.3.1 Error identification
+        - 4.1.2 Name, role, value
+        - Other (mentioned above)
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked ACCESSIBILITY.md for this gap.
+          required: true

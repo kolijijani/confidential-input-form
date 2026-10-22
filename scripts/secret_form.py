@@ -166,9 +166,9 @@ def render_field(i, f, multipart):
     if t in ("textarea", "code"):
         cls = ' class="mono"' if t == "code" else ""
         pha = f' placeholder="{hint}"' if hint else ""
-        inp = f'<textarea name="f{i}" rows="{6 if t == "code" else 3}"{cls} autocomplete="off"{pha}></textarea>'
+        inp = f'<textarea id="f{i}" name="f{i}" rows="{6 if t == "code" else 3}"{cls} autocomplete="off"{pha}></textarea>'
     elif t == "file":
-        inp = f'<input name="f{i}" type="file" autocomplete="off">'
+        inp = f'<input id="f{i}" name="f{i}" type="file" autocomplete="off">'
     elif t == "dual":
         # paste OR upload — user picks. A tiny JS helper toggles which is used.
         inp = (
@@ -177,16 +177,17 @@ def render_field(i, f, multipart):
             f'<button type="button" class="tab on" onclick="dualPick({i},\'paste\')">📋 Paste</button>'
             f'<button type="button" class="tab" onclick="dualPick({i},\'upload\')">⬆️ Upload</button>'
             f'</div>'
-            f'<textarea name="f{i}_paste" rows="6" class="mono" autocomplete="off" '
+            f'<textarea id="f{i}_paste" name="f{i}_paste" rows="6" class="mono" autocomplete="off" '
             f'placeholder="{hint or "Paste content here…"}"></textarea>'
-            f'<input name="f{i}_file" type="file" style="display:none" autocomplete="off">'
+            f'<input id="f{i}_file" name="f{i}_file" type="file" style="display:none" '
+            f'autocomplete="off" aria-label="{lbl} (upload)">'
             f'</div>'
         )
     else:
         typ = "password" if t == "password" else "text"
         af = " autofocus" if i == 0 else ""
-        inp = f'<input name="f{i}" type="{typ}" autocomplete="off"{ph}{af}>'
-    return f'<label>{lbl}{opt}</label>{inp}'
+        inp = f'<input id="f{i}" name="f{i}" type="{typ}" autocomplete="off"{ph}{af}>'
+    return f'<label for="f{i}">{lbl}{opt}</label>{inp}'
 
 
 def build_page(spec, token, multipart, expires_seconds=None):
@@ -196,7 +197,7 @@ def build_page(spec, token, multipart, expires_seconds=None):
     enc = ' enctype="multipart/form-data"' if multipart else ""
     if expires_seconds:
         note = ('target: protected file · mode: 0600 · single use'
-                '<br>This page closes in <span id="cd">--:--</span> or after the first save.')
+                '<br>This page closes in <span id="cd" role="timer">--:--</span> or after the first save.')
         countdown = f"""
 <script>
 (function(){{
@@ -230,7 +231,7 @@ def build_page(spec, token, multipart, expires_seconds=None):
  p.sub{{font-size:16px;line-height:1.55;color:#a8a8b3;margin:0 0 34px;max-width:590px}}
  .card{{background:#15171f;padding:28px;border:1px solid #30333d;border-radius:20px;width:620px;max-width:100%}}
  label{{display:block;font:650 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:17px 0 8px;color:#a3e635}}
- label:first-child{{margin-top:0}} .opt{{color:#777b88;font-size:10px}}
+ label:first-child{{margin-top:0}} .opt{{color:#9b9eaa;font-size:11px}}
  input,textarea{{width:100%;padding:13px 14px;border-radius:10px;border:1px solid #3d414e;background:#0c0d12;color:#fff;font-size:14px;font-family:inherit;outline:none}}
  input:focus,textarea:focus{{border-color:#a3e635;box-shadow:0 0 0 3px rgba(163,230,53,.12)}}
  textarea{{resize:vertical}} textarea.mono{{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}}
