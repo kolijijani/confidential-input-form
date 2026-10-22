@@ -12,10 +12,10 @@
 ![platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS-lightgrey)
 ![license](https://img.shields.io/badge/license-MIT-blue)
 
-See it working — type a key, commit, the page closes itself:
+See it working (desktop view) — type a key, commit, the page closes itself:
 
 <p align="center">
-  <img src="docs/screenshots/demo.gif" width="300" alt="Demo: typing a key into the form, submitting, and the page closing itself">
+  <img src="docs/screenshots/demo.gif" width="760" alt="Demo: typing a key into the form, submitting, and the page closing itself">
 </p>
 
 ## 📖 Overview

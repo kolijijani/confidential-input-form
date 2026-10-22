@@ -24,9 +24,7 @@ LIME = (163, 230, 53)
 INTER = "/usr/share/fonts/opentype/inter/"
 MONO = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
-shot = Image.open("docs/screenshots/demo@2x.gif")
-shot.seek(14)  # a frame with the form filled in
-shot = shot.convert("RGB")
+shot = Image.open("docs/screenshots/terminal-vault.png").convert("RGB")
 
 # trim page background precisely: keeps only rows/columns that carry content
 bg_probe = shot.getpixel((2, 2))
@@ -74,14 +72,17 @@ d.text((x, H - 68), "python stdlib · MIT · linux / macOS", font=f_small, fill=
 # screenshot on the right, cropped to the form area
 target_h = H - 112
 scale = target_h / shot.height
-shot_r = shot.resize((int(shot.width * scale), target_h), Image.LANCZOS)
+max_w = W - 620
+if shot.width * scale > max_w:
+    scale = max_w / shot.width
+shot_r = shot.resize((int(shot.width * scale), int(shot.height * scale)), Image.LANCZOS)
 card_x = W - shot_r.width - 56
-card_y = (H - target_h) // 2
+card_y = (H - shot_r.height) // 2
 
 # subtle card frame behind the screenshot
 pad = 10
 d.rounded_rectangle(
-    [card_x - pad, card_y - pad, card_x + shot_r.width + pad, card_y + target_h + pad],
+    [card_x - pad, card_y - pad, card_x + shot_r.width + pad, card_y + shot_r.height + pad],
     radius=18, fill=CARD, outline=BORDER, width=1,
 )
 mask = Image.new("L", shot_r.size, 0)

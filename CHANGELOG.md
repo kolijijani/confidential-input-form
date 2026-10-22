@@ -2,6 +2,18 @@
 
 All notable changes to Terminal Vault are documented here.
 
+## [1.1.2] - 2026-10-22
+
+### Changed
+
+- On desktop widths the form card now spans the same column as the header and title, instead of
+  sitting 140px narrower than the header and leaving a lopsided gap on the right.
+
+### Documentation
+
+- The demo GIF and the README screenshot are both desktop captures now (1100x720 and 1440x1050)
+  rather than a phone-shaped viewport, plus a regenerated link-preview card built from that still.
+
 ## [1.1.1] - 2026-10-22
 
 ### Added

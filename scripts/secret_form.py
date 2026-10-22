@@ -79,7 +79,7 @@ import threading
 import time
 import urllib.parse
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 EXPIRY_GRACE_SECONDS = 5  # keep the socket up briefly so a late visit sees the expired page
 DEF_ENV = os.path.expanduser("~/.config/secret-vault/secrets.env")
 ALLOWED_TYPES = {"text", "password", "textarea", "code", "file", "dual"}
@@ -229,7 +229,7 @@ def build_page(spec, token, multipart, expires_seconds=None):
  .kicker{{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:800;margin-bottom:14px}}
  h1{{font-size:clamp(38px,7vw,66px);line-height:.98;letter-spacing:-.065em;margin:0 0 18px;max-width:720px}}
  p.sub{{font-size:16px;line-height:1.55;color:#a8a8b3;margin:0 0 34px;max-width:590px}}
- .card{{background:#15171f;padding:28px;border:1px solid #30333d;border-radius:20px;width:620px;max-width:100%}}
+ .card{{background:#15171f;padding:28px;border:1px solid #30333d;border-radius:20px;width:100%;max-width:100%}}
  label{{display:block;font:650 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:17px 0 8px;color:#a3e635}}
  label:first-child{{margin-top:0}} .opt{{color:#9b9eaa;font-size:11px}}
  input,textarea{{width:100%;padding:13px 14px;border-radius:10px;border:1px solid #3d414e;background:#0c0d12;color:#fff;font-size:14px;font-family:inherit;outline:none}}
