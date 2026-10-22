@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Install Secret Vault — pipx, uvx, or run from source</title>
+<meta name="description" content="Install Secret Vault on Linux or macOS with Python 3.10+: clone and run, pipx/uvx from the Git URL, or copy the SKILL.md into your agent's skill directory.">
+<link rel="canonical" href="https://kolijijani.github.io/secret-vault/install.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Secret Vault">
+<meta property="og:title" content="Install Secret Vault — pipx, uvx, or run from source">
+<meta property="og:description" content="Install Secret Vault on Linux or macOS with Python 3.10+: clone and run, pipx/uvx from the Git URL, or copy the SKILL.md into your agent's skill directory.">
+<meta property="og:url" content="https://kolijijani.github.io/secret-vault/install.html">
+<meta property="og:image" content="https://kolijijani.github.io/secret-vault/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Install Secret Vault — pipx, uvx, or run from source">
+<meta name="twitter:description" content="Install Secret Vault on Linux or macOS with Python 3.10+: clone and run, pipx/uvx from the Git URL, or copy the SKILL.md into your agent's skill directory.">
+<meta name="twitter:image" content="https://kolijijani.github.io/secret-vault/social-preview.png">
+<meta name="theme-color" content="#0B0C10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230B0C10'/><text x='16' y='23' font-family='monospace' font-size='18' font-weight='700' text-anchor='middle' fill='%238CE62E'>//</text></svg>">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="logo" href="index.html"><span class="slash">//</span> secret<span class="vault">_vault</span></a>
+  <nav class="site"><a href="index.html">overview</a><a href="install.html" aria-current="page">install</a><a href="usage.html">usage</a><a href="agents.html">agents</a><a href="security.html">security</a><a href="faq.html">faq</a><a href="changelog.html">changelog</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1><span class="slash">//</span> Install</h1>
+<p class="lede">Three ways in: run from a checkout, install as a command, or install the agent skill.
+None of them need a third-party Python package.</p>
+
+<h2>Requirements</h2>
+<ul>
+<li>Linux or macOS with Python 3.10 or newer</li>
+<li>A modern browser</li>
+<li>Localhost, or a trusted private network when opening the form from another device</li>
+<li>Chrome or Chromium only if you want to regenerate the README screenshot</li>
+</ul>
+
+<h2>Run from a checkout</h2>
+<pre><code>git clone https://github.com/kolijijani/secret-vault.git
+cd secret-vault
+python3 scripts/secret_form.py --version</code></pre>
+
+<h2>Install as a command</h2>
+<pre><code>pipx install git+https://github.com/kolijijani/secret-vault.git</code></pre>
+<pre><code>uvx --from git+https://github.com/kolijijani/secret-vault secret-vault --version</code></pre>
+<div class="warn">Do not <code>pip install secret-vault</code>: that name on PyPI belongs to an unrelated
+project. Install from the Git URL shown above, or from a checkout.</div>
+
+<h2>Install the agent skill</h2>
+<p>The installer copies <code>SKILL.md</code> into the agent's skill directory and rewrites the script path
+to your checkout:</p>
+<pre><code>./install.sh              # auto-detects ~/.hermes/skills, ~/.claude/skills, ~/.agents/skills</code></pre>
+<pre><code>./install.sh ~/.claude/skills   # or name the directory explicitly</code></pre>
+<pre><code>./install.sh --dry-run          # preview without writing</code></pre>
+<p>See <a href="agents.html">Use with an agent</a> for the per-agent matrix.</p>
+
+<h2>Verify</h2>
+<pre><code>python3 scripts/secret_form.py --version</code></pre>
+<p>Then start the example and confirm the page shows <code>// secret_vault</code>, <code>LIVE / SINGLE USE</code>
+and a countdown.</p>
+
+<h2>Uninstall</h2>
+<pre><code>pipx uninstall secret-vault</code></pre>
+<p>Remove the skill directory the installer created, and any <code>~/.config/secret-vault/</code> files you
+no longer want.</p>
+</main>
+<footer class="site"><div class="wrap">
+  <span>MIT · v1.2.0 · maintained by <a href="https://github.com/kolijijani">Mohammad Koliji Jani Bin Azizan</a></span>
+  <span><a href="https://github.com/kolijijani/secret-vault">GitHub</a> · <a href="https://github.com/kolijijani/secret-vault/issues">Issues</a> · <a href="https://github.com/kolijijani/secret-vault/blob/main/SECURITY.md">Security</a></span>
+</div></footer>
+</body>
+</html>

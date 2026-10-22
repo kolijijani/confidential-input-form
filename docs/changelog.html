@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Secret Vault changelog — every release</title>
+<meta name="description" content="Release history for Secret Vault: renames, form layout fixes, expiry timer, audit log and the one-shot form behaviour.">
+<link rel="canonical" href="https://kolijijani.github.io/secret-vault/changelog.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Secret Vault">
+<meta property="og:title" content="Secret Vault changelog — every release">
+<meta property="og:description" content="Release history for Secret Vault: renames, form layout fixes, expiry timer, audit log and the one-shot form behaviour.">
+<meta property="og:url" content="https://kolijijani.github.io/secret-vault/changelog.html">
+<meta property="og:image" content="https://kolijijani.github.io/secret-vault/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Secret Vault changelog — every release">
+<meta name="twitter:description" content="Release history for Secret Vault: renames, form layout fixes, expiry timer, audit log and the one-shot form behaviour.">
+<meta name="twitter:image" content="https://kolijijani.github.io/secret-vault/social-preview.png">
+<meta name="theme-color" content="#0B0C10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230B0C10'/><text x='16' y='23' font-family='monospace' font-size='18' font-weight='700' text-anchor='middle' fill='%238CE62E'>//</text></svg>">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="logo" href="index.html"><span class="slash">//</span> secret<span class="vault">_vault</span></a>
+  <nav class="site"><a href="index.html">overview</a><a href="install.html">install</a><a href="usage.html">usage</a><a href="agents.html">agents</a><a href="security.html">security</a><a href="faq.html">faq</a><a href="changelog.html" aria-current="page">changelog</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1><span class="slash">//</span> Changelog</h1>
+<p class="lede">Every release, newest first. The machine-readable copy lives in
+<a href="https://github.com/kolijijani/secret-vault/blob/main/CHANGELOG.md">CHANGELOG.md</a>.</p>
+<p>All notable changes to Secret Vault are documented here.</p><h2>[1.2.0] - 2026-10-22</h2><h3>Renamed</h3><ul><li>The project is now **Secret Vault**. The repository moved from</li></ul><p>  `kolijijani/confidential-input-form` to `kolijijani/secret-vault`, the package name, console</p><p>  script, skill name, screenshots and links all follow. The old URL redirects; the on-disk module</p><p>  (`secret_form.py`) keeps its name so imports stay stable.</p><h2>[1.1.2] - 2026-10-22</h2><h3>Changed</h3><ul><li>On desktop widths the form card now spans the same column as the header and title, instead of</li></ul><p>  sitting 140px narrower than the header and leaving a lopsided gap on the right.</p><h3>Documentation</h3><ul><li>The demo GIF and the README screenshot are both desktop captures now (1100x720 and 1440x1050)</li></ul><p>  rather than a phone-shaped viewport, plus a regenerated link-preview card built from that still.</p><h2>[1.1.1] - 2026-10-22</h2><h3>Added</h3><ul><li>`CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, issue templates (bug, feature, accessibility), a pull</li></ul><p>  request template, and `ACCESSIBILITY.md` with an honest list of known gaps.</p><ul><li>CI and release badges in the README; the version badge is now dynamic instead of hard-coded.</li></ul><h3>Fixed</h3><ul><li>Form fields are now programmatically labelled (`&lt;label for&gt;` → `&lt;input id&gt;`), including the</li></ul><p>  `dual` paste/upload pair, so screen readers announce each field with its name.</p><ul><li>The &quot;(optional)&quot; micro-label contrast was raised above 4.5:1.</li><li>The README screenshot showed the pre-1.1.0 footer (&quot;expiry: after first save&quot;) and no countdown;</li></ul><p>  it is regenerated from the current renderer.</p><h2>[1.1.0] - 2026-10-22</h2><h3>Added</h3><ul><li>`--expire-minutes` (default `15`, `0` disables): the form closes on a deadline, the page shows a</li></ul><p>  live countdown, and an expired link returns `410 Gone` with a &quot;This form expired&quot; page.</p><ul><li>`--audit-log PATH`: one value-free line per submission (timestamp, outcome, field names, byte</li></ul><p>  count) written mode `0600`.</p><ul><li>`--version`, which prints `secret-vault &lt;version&gt;`.</li><li>`pyproject.toml` with a `secret-vault` console script, so `pipx`/`uvx` can install it.</li><li>`install.sh` plus `docs/agents.md` covering Hermes, Claude Code, Codex and Cursor skill paths, and</li></ul><p>  the script-path rewrite that makes a copied `SKILL.md` actually work.</p><ul><li>Real-socket end-to-end tests: one-shot save, `0600` target, audit line without values, refusal</li></ul><p>  after expiry, wildcard-bind rejection.</p><h3>Changed</h3><ul><li>**Breaking:** `--bind 0.0.0.0` now exits with an error unless `--allow-wildcard` is passed.</li><li>The page footer reads `single use` instead of the misleading `expiry: after first save`.</li><li>CI runs unit tests, end-to-end tests, a source install of the CLI, `ruff`, and `sh -n install.sh`.</li></ul><h3>Fixed</h3><ul><li>An abandoned form no longer stays listening forever: the deadline closes it and writes nothing.</li></ul><h2>[1.0.0] - 2026-10-21</h2><h3>Added</h3><ul><li>Adaptive JSON specifications with six field types.</li><li>Secret Vault visual system and responsive one-shot form.</li><li>Environment-file and raw-file modes.</li><li>Atomic mode-`0600` writes with symlink protection.</li><li>Binary-safe bounded multipart parsing and random upload names.</li><li>Locked single-claim submission state.</li><li>Localhost-first networking and private-network guidance.</li><li>Linux and macOS support with POSIX permission guarantees.</li><li>AI-agent skill, examples, security documentation, and regression tests.</li></ul>
+</main>
+<footer class="site"><div class="wrap">
+  <span>MIT · v1.2.0 · maintained by <a href="https://github.com/kolijijani">Mohammad Koliji Jani Bin Azizan</a></span>
+  <span><a href="https://github.com/kolijijani/secret-vault">GitHub</a> · <a href="https://github.com/kolijijani/secret-vault/issues">Issues</a> · <a href="https://github.com/kolijijani/secret-vault/blob/main/SECURITY.md">Security</a></span>
+</div></footer>
+</body>
+</html>

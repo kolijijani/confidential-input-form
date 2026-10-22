@@ -4,6 +4,9 @@
 
 **A one-shot, local-first form for handing secrets to AI agents without putting them in chat.**
 
+**Documentation: [kolijijani.github.io/secret-vault](https://kolijijani.github.io/secret-vault/)** — install,
+usage, the per-agent skill matrix, the security model and troubleshooting.
+
 ![status](https://img.shields.io/badge/status-stable-success)
 [![CI](https://github.com/kolijijani/secret-vault/actions/workflows/ci.yml/badge.svg)](https://github.com/kolijijani/secret-vault/actions/workflows/ci.yml)
 [![release](https://img.shields.io/github/v/release/kolijijani/secret-vault?color=a3e635)](https://github.com/kolijijani/secret-vault/releases/latest)
@@ -96,6 +99,9 @@ No third-party Python packages are required.
 
 ## ⚡ Installation
 
+Full documentation with per-agent setup, troubleshooting and the security model:
+**https://kolijijani.github.io/secret-vault/**
+
 ```sh
 git clone https://github.com/kolijijani/secret-vault.git
 ```
@@ -119,6 +125,9 @@ pipx install git+https://github.com/kolijijani/secret-vault.git
 ```sh
 uvx --from git+https://github.com/kolijijani/secret-vault secret-vault --version
 ```
+
+The PyPI name `secret-vault` belongs to an unrelated project — always install from the Git URL above,
+never with a bare `pip install secret-vault`.
 
 Teach your agent the skill — the installer copies `SKILL.md` into the agent's skill directory and
 rewrites the script path to this checkout:

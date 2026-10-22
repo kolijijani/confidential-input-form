@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Secret Vault FAQ — port in use, expired form, symlink rejected, agent still asking</title>
+<meta name="description" content="Answers to the common Secret Vault problems: form only reachable on localhost, port in use, expired token, rejected symlink, and an agent that still asks for the key in chat.">
+<link rel="canonical" href="https://kolijijani.github.io/secret-vault/faq.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Secret Vault">
+<meta property="og:title" content="Secret Vault FAQ — port in use, expired form, symlink rejected, agent still asking">
+<meta property="og:description" content="Answers to the common Secret Vault problems: form only reachable on localhost, port in use, expired token, rejected symlink, and an agent that still asks for the key in chat.">
+<meta property="og:url" content="https://kolijijani.github.io/secret-vault/faq.html">
+<meta property="og:image" content="https://kolijijani.github.io/secret-vault/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Secret Vault FAQ — port in use, expired form, symlink rejected, agent still asking">
+<meta name="twitter:description" content="Answers to the common Secret Vault problems: form only reachable on localhost, port in use, expired token, rejected symlink, and an agent that still asks for the key in chat.">
+<meta name="twitter:image" content="https://kolijijani.github.io/secret-vault/social-preview.png">
+<meta name="theme-color" content="#0B0C10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230B0C10'/><text x='16' y='23' font-family='monospace' font-size='18' font-weight='700' text-anchor='middle' fill='%238CE62E'>//</text></svg>">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="logo" href="index.html"><span class="slash">//</span> secret<span class="vault">_vault</span></a>
+  <nav class="site"><a href="index.html">overview</a><a href="install.html">install</a><a href="usage.html">usage</a><a href="agents.html">agents</a><a href="security.html">security</a><a href="faq.html" aria-current="page">faq</a><a href="changelog.html">changelog</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1><span class="slash">//</span> FAQ &amp; troubleshooting</h1>
+<p class="lede">The problems people actually hit, and the limitations worth knowing before you rely on this.</p>
+
+<h2>The URL works only on the server machine</h2>
+<p>The secure default is <code>127.0.0.1</code>. Bind explicitly to a trusted private IPv4 address when
+another device must open the form:</p>
+<pre><code>python3 scripts/secret_form.py --bind 100.x.y.z --spec examples/api-key.json</code></pre>
+<p>Never bind to a public interface without a protected tunnel and TLS proxy.</p>
+
+<h2>Port already in use</h2>
+<pre><code>python3 scripts/secret_form.py --port 8732 --spec examples/api-key.json</code></pre>
+
+<h2>The page closes after submission</h2>
+<p>That is expected. A successful submission consumes the token and shuts the server down. Start a new
+process to collect another value.</p>
+
+<h2>A target symlink is rejected</h2>
+<p>That is deliberate protection against redirecting a secret into an unexpected file. Use a regular file
+path owned by the current user.</p>
+
+<h2>The form expired before I submitted</h2>
+<p>The deadline defaults to 15 minutes. Restart the process for a fresh token, or raise the deadline with
+<code>--expire-minutes 30</code>. <code>410 Gone</code> means nothing was written.</p>
+
+<h2>My agent keeps asking me to paste the key in chat</h2>
+<p>The skill is installed but its script path is wrong, so the agent cannot start a form and falls back to
+asking. Re-run <code>./install.sh</code> against the right skill directory, or replace
+<code>scripts/secret_form.py</code> inside <code>SKILL.md</code> with the absolute path to your checkout.</p>
+
+<h2>Can I use it over the internet?</h2>
+<p>Not directly. Put it behind Tailscale, a VPN, or a TLS proxy you trust. The built-in server is HTTP and
+has no authentication beyond the random token.</p>
+
+<h2>Does it work on Windows?</h2>
+<p>No. Windows filesystem permission and symlink semantics do not provide the POSIX guarantees this release
+enforces. Use WSL if you need it on a Windows machine.</p>
+
+<h2>Is it a secret manager like Vault or 1Password?</h2>
+<p>No. It is a handoff tool: one form, one value, one write, then it exits. It does not store, rotate,
+version or share secrets. Use a real secret manager for anything long-lived.</p>
+
+<h2>Limitations, in one list</h2>
+<ul>
+<li>HTTP only; TLS termination belongs to a proxy or private overlay network.</li>
+<li>IPv6 bind addresses are not supported.</li>
+<li>Windows is not supported.</li>
+<li>Single-use by design; no submission history.</li>
+<li>Does not rotate, revoke or validate the submitted credential.</li>
+<li>Protecting the destination directory and host remains your responsibility.</li>
+</ul>
+</main>
+<footer class="site"><div class="wrap">
+  <span>MIT · v1.2.0 · maintained by <a href="https://github.com/kolijijani">Mohammad Koliji Jani Bin Azizan</a></span>
+  <span><a href="https://github.com/kolijijani/secret-vault">GitHub</a> · <a href="https://github.com/kolijijani/secret-vault/issues">Issues</a> · <a href="https://github.com/kolijijani/secret-vault/blob/main/SECURITY.md">Security</a></span>
+</div></footer>
+</body>
+</html>

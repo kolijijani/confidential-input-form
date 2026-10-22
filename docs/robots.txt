@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kolijijani.github.io/secret-vault/sitemap.xml

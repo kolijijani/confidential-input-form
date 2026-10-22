@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Use Secret Vault with an AI agent — Hermes, Claude, Codex, Cursor</title>
+<meta name="description" content="Where to install the Secret Vault SKILL.md for Hermes, Claude, Codex and Cursor, why the script path matters, and how to verify a handoff worked.">
+<link rel="canonical" href="https://kolijijani.github.io/secret-vault/agents.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Secret Vault">
+<meta property="og:title" content="Use Secret Vault with an AI agent — Hermes, Claude, Codex, Cursor">
+<meta property="og:description" content="Where to install the Secret Vault SKILL.md for Hermes, Claude, Codex and Cursor, why the script path matters, and how to verify a handoff worked.">
+<meta property="og:url" content="https://kolijijani.github.io/secret-vault/agents.html">
+<meta property="og:image" content="https://kolijijani.github.io/secret-vault/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Use Secret Vault with an AI agent — Hermes, Claude, Codex, Cursor">
+<meta name="twitter:description" content="Where to install the Secret Vault SKILL.md for Hermes, Claude, Codex and Cursor, why the script path matters, and how to verify a handoff worked.">
+<meta name="twitter:image" content="https://kolijijani.github.io/secret-vault/social-preview.png">
+<meta name="theme-color" content="#0B0C10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230B0C10'/><text x='16' y='23' font-family='monospace' font-size='18' font-weight='700' text-anchor='middle' fill='%238CE62E'>//</text></svg>">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="logo" href="index.html"><span class="slash">//</span> secret<span class="vault">_vault</span></a>
+  <nav class="site"><a href="index.html">overview</a><a href="install.html">install</a><a href="usage.html">usage</a><a href="agents.html" aria-current="page">agents</a><a href="security.html">security</a><a href="faq.html">faq</a><a href="changelog.html">changelog</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1><span class="slash">//</span> Use with an agent</h1>
+<p class="lede"><code>SKILL.md</code> is the agent-facing instruction file. <code>scripts/secret_form.py</code>
+is the tool it calls. Installing the skill does not install the script.</p>
+
+<h2>Skill directory per agent</h2>
+<table>
+<tr><th>Agent</th><th>Skill directory</th><th>Notes</th></tr>
+<tr><td>Hermes</td><td><code>~/.hermes/skills/secret-vault/SKILL.md</code></td><td>Raw SKILL.md install works, but the script path still needs fixing</td></tr>
+<tr><td>[CC]</td><td><code>~/.claude/skills/secret-vault/SKILL.md</code></td><td>Skills load by <code>name</code> + <code>description</code> frontmatter</td></tr>
+<tr><td>Codex / generic agent</td><td><code>~/.agents/skills/</code> or project <code>.agents/skills/</code></td><td>Any layout that lets the agent read <code>SKILL.md</code> on demand</td></tr>
+<tr><td>Cursor</td><td>project <code>.cursor/rules/</code> or <code>AGENTS.md</code></td><td>Reference the SKILL.md path in the rule text</td></tr>
+</table>
+
+<h2>Install</h2>
+<pre><code>git clone https://github.com/kolijijani/secret-vault.git
+cd secret-vault
+./install.sh ~/.claude/skills</code></pre>
+<p><code>./install.sh</code> with no argument auto-detects the first existing directory from
+<code>~/.hermes/skills</code>, <code>~/.claude/skills</code>, <code>~/.agents/skills</code>,
+<code>~/.config/agents/skills</code>. Use <code>--dry-run</code> to preview.</p>
+<p>Without the installer, copy <code>SKILL.md</code> and replace every <code>scripts/secret_form.py</code>
+with the absolute path to your checkout. If you installed the CLI instead, replace it with
+<code>secret-vault</code>.</p>
+
+<h2>Why the path matters</h2>
+<p><code>SKILL.md</code> ships with <code>scripts/secret_form.py</code>, a repository-relative path. Copy only
+the markdown and the agent will call a script that does not exist — the failure mode is a confused agent
+asking you to paste a key into chat, which is exactly what this project prevents.</p>
+
+<h2>Verify the handoff works</h2>
+<pre><code>python3 scripts/secret_form.py --version</code></pre>
+<p>Then ask the agent for a form and confirm the page shows <code>// secret_vault</code>,
+<code>LIVE / SINGLE USE</code> and a countdown. If the agent shows you a secret value in chat, stop and
+re-read the skill's <em>Rule (never break)</em> section.</p>
+
+<h2>Give the agent the rule, not the value</h2>
+<p>The skill's core instruction is one line: when a task needs a credential, start a form and give the user
+the URL — never ask for the value in chat. Everything else in the skill exists to make that work in
+practice: choosing field types, choosing the target file, handling expiry, and proving the handoff with the
+audit log.</p>
+</main>
+<footer class="site"><div class="wrap">
+  <span>MIT · v1.2.0 · maintained by <a href="https://github.com/kolijijani">Mohammad Koliji Jani Bin Azizan</a></span>
+  <span><a href="https://github.com/kolijijani/secret-vault">GitHub</a> · <a href="https://github.com/kolijijani/secret-vault/issues">Issues</a> · <a href="https://github.com/kolijijani/secret-vault/blob/main/SECURITY.md">Security</a></span>
+</div></footer>
+</body>
+</html>
